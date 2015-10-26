@@ -5,6 +5,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class MainActivity extends ListActivity {
         this.getDir("", MODE_WORLD_READABLE);
         //显示文件列表
         showFileDir("/data/data/com.pingan.wetalk/");
-        Log.e("jj",this.getDir("",MODE_WORLD_READABLE).toString());
+        Log.e("jj", this.getDir("", MODE_WORLD_READABLE).toString());
 
     }
     private void showFileDir(String path){
@@ -68,6 +69,12 @@ public class MainActivity extends ListActivity {
                 showFileDir(path);
             }
             else{
+                SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(
+                        file, null);
+
+                Intent intent=new Intent(this,AndroidDatabaseManager.class);
+                intent.putExtra("file",file);
+                startActivity(intent);
                 //处理文件
 
             }

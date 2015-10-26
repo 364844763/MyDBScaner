@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class DatabaseHelper extends SQLiteOpenHelper{
     private static final int VERSION = 1;
     private static final String SWORD="SWORD";
-
+    SQLiteDatabase sqlDB;
     //三个不同参数的构造函数
     //带全部参数的构造函数，此构造函数必不可少
     public DatabaseHelper(Context context, String name, CursorFactory factory,
@@ -29,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     //带两个参数的构造函数，调用的其实是带三个参数的构造函数
     public DatabaseHelper(Context context,String name){
         this(context, name, VERSION);
+
     }
     //带三个参数的构造函数，调用的是带所有参数的构造函数
     public DatabaseHelper(Context context,String name,int version){
@@ -51,53 +52,5 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
 
 
-    public ArrayList<Cursor> getData(String Query){
-        //get writable database
-        SQLiteDatabase sqlDB = this.getWritableDatabase();
-        String[] columns = new String[] { "mesage" };
-        //an array list of cursor to save two cursors one has results from the query
-        //other cursor stores error message if any errors are triggered
-        ArrayList<Cursor> alc = new ArrayList<Cursor>(2);
-        MatrixCursor Cursor2= new MatrixCursor(columns);
-        alc.add(null);
-        alc.add(null);
 
-
-        try{
-            String maxQuery = Query ;
-            //execute the query results will be save in Cursor c
-            Cursor c = sqlDB.rawQuery(maxQuery, null);
-
-
-            //add value to cursor2
-            Cursor2.addRow(new Object[] { "Success" });
-
-            alc.set(1,Cursor2);
-            if (null != c && c.getCount() > 0) {
-
-
-                alc.set(0,c);
-                c.moveToFirst();
-
-                return alc ;
-            }
-            return alc;
-        } catch(SQLException sqlEx){
-            Log.d("printing exception", sqlEx.getMessage());
-            //if any exceptions are triggered save the error message to cursor an return the arraylist
-            Cursor2.addRow(new Object[] { ""+sqlEx.getMessage() });
-            alc.set(1,Cursor2);
-            return alc;
-        } catch(Exception ex){
-
-            Log.d("printing exception", ex.getMessage());
-
-            //if any exceptions are triggered save the error message to cursor an return the arraylist
-            Cursor2.addRow(new Object[] { ""+ex.getMessage() });
-            alc.set(1,Cursor2);
-            return alc;
-        }
-
-
-    }
 }
