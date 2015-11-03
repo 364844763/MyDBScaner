@@ -712,7 +712,7 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 		                final TextView tableheadercolums = new TextView(getApplicationContext());
 
 		                tableheadercolums.setPadding(0, 0, 4, 3);
-		                tableheadercolums.setText("  表 内 无 数 据 ");
+		                tableheadercolums.setText("   没 有 数 据   ");
 		                tableheadercolums.setTextSize(30);
 		                tableheadercolums.setTextColor(Color.RED);
 

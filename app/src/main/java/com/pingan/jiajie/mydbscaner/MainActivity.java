@@ -129,10 +129,10 @@ public class MainActivity extends ListActivity {
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK ) {
-            if (file.getParent()!=null)
+            if (file!=null&&!file.getParent().equals("/data/data"))
             showFileDir(file.getParent());
             return true;
-        } else
+        }else
             return super.onKeyDown(keyCode, event);
     }
 }
