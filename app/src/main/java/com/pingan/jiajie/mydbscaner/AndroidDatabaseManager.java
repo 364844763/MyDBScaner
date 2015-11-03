@@ -53,11 +53,6 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
     	public static boolean isCustomQuery;
     }
 
-// all global variables
-	
-	//in the below line Change the text 'yourCustomSqlHelper' with your custom sqlitehelper class name.
-	//Do not change the variable name dbm
-	DatabaseHelper dbm;
 	TableLayout tableLayout;
 	LayoutParams tableRowParams;
 	HorizontalScrollView hsv;
@@ -76,8 +71,6 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 		Intent intent=getIntent();
         File file=(File)intent.getSerializableExtra("file");
         sqlDB= SQLiteDatabase.openOrCreateDatabase(file, null);
-		//in the below line Change the text 'yourCustomSqlHelper' with your custom sqlitehelper class name
-		dbm = new DatabaseHelper(AndroidDatabaseManager.this,"test_db");
 		
 		mainscrollview = new ScrollView(AndroidDatabaseManager.this);
 		
@@ -98,7 +91,7 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 		firstrowlp.weight = 1;
 
 		TextView maintext = new TextView(AndroidDatabaseManager.this);
-		maintext.setText("Select Table");
+		maintext.setText("选择表");
 		maintext.setTextSize(22);
 		maintext.setLayoutParams(firstrowlp);
 		select_table=new Spinner(AndroidDatabaseManager.this);
@@ -136,18 +129,18 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 		//A button which generates a text view from which user can write custome queries
 		final EditText customquerytext = new EditText(this);
 		customquerytext.setVisibility(View.GONE);
-		customquerytext.setHint("Enter Your Query here and Click on Submit Query Button .Results will be displayed below");
+		customquerytext.setHint("输入sql语句");
 		 mainLayout.addView(customquerytext);
 		
 		final Button submitQuery = new Button(AndroidDatabaseManager.this);
 		submitQuery.setVisibility(View.GONE);
-		submitQuery.setText("Submit Query");
+		submitQuery.setText("提交查询");
 
-		submitQuery.setBackgroundColor(Color.parseColor("#BAE7F6"));
+		submitQuery.setBackgroundColor(Color.BLUE);
 		 mainLayout.addView(submitQuery);
 		
 		final TextView help = new TextView(AndroidDatabaseManager.this);
-		help.setText("Click on the row below to update values or delete the tuple");
+		help.setText("点击列查看详细信息");
 		help.setPadding(0,5,0,5);
 		
                 // the spinner which gives user a option to add new row , drop or delete table
@@ -161,13 +154,13 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 		//the third layout which has buttons for the pagination of content from database
 		final LinearLayout thirdrow = new LinearLayout(AndroidDatabaseManager.this);
 		previous = new Button(AndroidDatabaseManager.this);
-		previous.setText("Previous");
+		previous.setText("上一页");
 		
-		previous.setBackgroundColor(Color.parseColor("#BAE7F6"));
+		previous.setBackgroundColor(Color.BLUE);
 		previous.setLayoutParams(secondrowlp);
 		next = new Button(AndroidDatabaseManager.this);
-		next.setText("Next");
-		next.setBackgroundColor(Color.parseColor("#BAE7F6"));
+		next.setText("下一页");
+		next.setBackgroundColor(Color.BLUE);
 		next.setLayoutParams(secondrowlp);
 		TextView tvblank = new TextView(this);
 		tvblank.setLayoutParams(secondrowlp);
@@ -180,14 +173,14 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 		//the text view at the bottom of the screen which displays error or success messages after a query is executed
 		tvmessage =new TextView(AndroidDatabaseManager.this);
 
-		tvmessage.setText("Error Messages will be displayed here");
+		tvmessage.setText("错误信息显示");
 		String Query = "SELECT name _id FROM sqlite_master WHERE type ='table'";
 		tvmessage.setTextSize(18);
 		 mainLayout.addView(tvmessage);
 		
 		final Button customQuery = new Button(AndroidDatabaseManager.this);
-		customQuery.setText("Custom Query");
-		customQuery.setBackgroundColor(Color.parseColor("#BAE7F6"));
+		customQuery.setText("自定义查询");
+		customQuery.setBackgroundColor(Color.BLUE);
 		 mainLayout.addView(customQuery);
 		customQuery.setOnClickListener(new OnClickListener() {
 			
@@ -231,7 +224,7 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 					
 					tvmessage.setBackgroundColor(Color.parseColor("#2ecc71"));
 					if(c4!=null){
-						tvmessage.setText("Queru Executed successfully.Number of rows returned :"+c4.getCount());
+						tvmessage.setText("查询成功.一共有数据 :"+c4.getCount()+"条");
 						if(c4.getCount()>0)
 						{
 						indexInfo.maincursor=c4;
@@ -288,10 +281,10 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
                 public View getView(int position, View convertView, ViewGroup parent) {
                         View v = super.getView(position, convertView, parent);
 
-                        v.setBackgroundColor(Color.WHITE);
+                       // v.setBackgroundColor(Color.WHITE);
                         TextView adap =(TextView)v;
                         adap.setTextSize(20);
-                        
+                        adap.setTextColor(Color.BLACK);
                         return adap;
                 }
 
@@ -299,7 +292,7 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
                 public View getDropDownView(int position,  View convertView,  ViewGroup parent) {
                          View v =super.getDropDownView(position, convertView, parent);
 
-                        v.setBackgroundColor(Color.WHITE);
+                        //v.setBackgroundColor(Color.WHITE);
 
                         return v;
                 }
@@ -348,16 +341,15 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 	            	//displaying the content of the table which is selected in the select_table spinner
 	            	Log.d("selected table name is",""+c.getString(0));
 	            	indexInfo.table_name=c.getString(0);
-	            	tvmessage.setText("Error Messages will be displayed here");
+	            	tvmessage.setText("错误信息显示");
 	            	tvmessage.setBackgroundColor(Color.WHITE);
 
 	            	 //removes any data if present in the table layout
                        tableLayout.removeAllViews();
 	            	ArrayList<String> spinnertablevalues = new ArrayList<String>();
-	            	spinnertablevalues.add("Click here to change this table");
-	                spinnertablevalues.add("Add row to this table");
-	                spinnertablevalues.add("Delete this table");
-	                spinnertablevalues.add("Drop this table");
+	            	spinnertablevalues.add("修改表值");
+	                spinnertablevalues.add("增加");
+	                spinnertablevalues.add("删除");
 	                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, spinnertablevalues);
 	                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
 
@@ -368,17 +360,17 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 	                    public View getView(int position, View convertView, ViewGroup parent) {
 	                            View v = super.getView(position, convertView, parent);
 
-	                            v.setBackgroundColor(Color.WHITE);
+	                           // v.setBackgroundColor(Color.WHITE);
 	                            TextView adap =(TextView)v;
 	                            adap.setTextSize(20);
-	                            
+	                           // adap.setTextColor(Color.BLACK);
 	                            return adap;
 	                    }
 
 	                    public View getDropDownView(int position,  View convertView,  ViewGroup parent) {
 	                             View v =super.getDropDownView(position, convertView, parent);
 
-	                            v.setBackgroundColor(Color.WHITE);
+								//v.setBackgroundColor(Color.WHITE);
 
 	                            return v;
 	                    }
@@ -720,7 +712,7 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 		                final TextView tableheadercolums = new TextView(getApplicationContext());
 
 		                tableheadercolums.setPadding(0, 0, 4, 3);
-		                tableheadercolums.setText("   Table   Is   Empty   "); 
+		                tableheadercolums.setText("  表 内 无 数 据 ");
 		                tableheadercolums.setTextSize(30);
 		                tableheadercolums.setTextColor(Color.RED);
 
@@ -1250,7 +1242,7 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 		        //if there are no tuples to be shown toast that this the last page	
 		            if(indexInfo.currentpage>=indexInfo.numberofpages)
 		            {
-		            	Toast.makeText(getApplicationContext(), "This is the last page", Toast.LENGTH_LONG).show();
+		            	Toast.makeText(getApplicationContext(), "最后一页了", Toast.LENGTH_LONG).show();
 		            }
 		            else
 		            {
